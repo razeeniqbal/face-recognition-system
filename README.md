@@ -35,14 +35,14 @@ face-recognition-system/
 ├── verify_model.py                # Model verification and diagnostics
 ├── requirements.txt               # Python dependencies
 ├── README.md                      # Project documentation
-├── models/                        # Directory for storing trained models (not in repo - see note below)
-│   ├── face_classifier.pkl        # Trained classifier
-│   ├── res10_300x300_ssd_iter_140000.caffemodel  # OpenCV DNN face detector (optional)
-│   └── deploy.prototxt            # OpenCV DNN config (optional)
-└── lfw/                           # LFW dataset directory (not in repo - see note below)
+├── models/                        # Directory for storing trained models
+│   ├── face_classifier.pkl        # Trained classifier (generated after training)
+│   ├── res10_300x300_ssd_iter_140000.caffemodel  # OpenCV DNN face detector (downloaded)
+│   └── deploy.prototxt            # OpenCV DNN config (downloaded)
+└── lfw/                           # LFW dataset directory (downloaded)
 ```
 
-> **Note:** The `models/` directory and `lfw/` dataset directory are not included in the GitHub repository due to file size limitations (>25MB). See the "Large Files Download" section below for information on how to obtain these files.
+> **Note:** The `models/` directory and `lfw/` dataset are not included in the GitHub repository due to size constraints. These will be generated/downloaded during the setup process as explained below.
 
 ## Installation
 
@@ -70,25 +70,22 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 python setup.py
 ```
 
-4. Download the required model files:
-   - Option A: Use the Google Drive link provided in the "Large Files Download" section
-   - Option B: Download the dataset and models automatically:
-     ```bash
-     python download_models.py
-     ```
-     This script will download the LFW (Labeled Faces in the Wild) dataset for training.
+4. Download the LFW dataset (if you want to train the model yourself):
+```bash
+python download_models.py
+```
+This script will download the LFW (Labeled Faces in the Wild) dataset for training.
 
 5. Download the Caffe models for better face detection (optional but recommended):
-   - Option A: Use the Google Drive link for the models folder
-   - Option B: Download automatically:
-     ```bash
-     python download_caffe_model.py
-     ```
+```bash
+python download_caffe_model.py
+```
 
-6. Train the model:
+6. Train the model to generate the face_classifier.pkl file:
 ```bash
 python train.py --data_dir lfw --min_images 3 --augmentation
 ```
+This step will create the `models/face_classifier.pkl` file necessary for face recognition.
 
 7. Run the application:
 ```bash
@@ -96,6 +93,8 @@ streamlit run app.py
 ```
 
 8. Access the application in your browser at `http://localhost:8501`
+
+> **Important:** The models and dataset files will be automatically downloaded and generated during the setup process. You do not need to manually download any files that are not included in the repository.
 
 ## Face Detection Options
 
@@ -119,17 +118,15 @@ The system automatically tries each method in the order listed above, using the 
 
 ### Dataset Organization
 
-Organize your dataset with one directory per person:
+The LFW dataset will be automatically organized in the correct format when downloaded:
 
 ```
-dataset_directory/
-├── person1_name/
-│   ├── person1_img1.jpg
-│   ├── person1_img2.jpg
+lfw/
+├── Aaron_Eckhart/
+│   ├── Aaron_Eckhart_0001.jpg
 │   └── ...
-├── person2_name/
-│   ├── person2_img1.jpg
-│   ├── person2_img2.jpg
+├── Aaron_Guiel/
+│   ├── Aaron_Guiel_0001.jpg
 │   └── ...
 └── ...
 ```
@@ -138,12 +135,12 @@ dataset_directory/
 
 Standard training:
 ```bash
-python train.py --data_dir your_dataset_directory --min_images 3 --augmentation
+python train.py --data_dir lfw --min_images 3 --augmentation
 ```
 
 For memory-constrained systems, use incremental training:
 ```bash
-python train.py --mode incremental --data_dir your_dataset_directory --start_people 5 --max_people 20 --augmentation
+python train.py --mode incremental --data_dir lfw --start_people 5 --max_people 20 --augmentation
 ```
 
 ### Training Parameters
@@ -205,11 +202,16 @@ This increases the effective training dataset size and improves model robustness
 
 ### Streamlit Cloud Deployment
 
-1. Push your code to GitHub
+The application is designed to work seamlessly on Streamlit Cloud:
+
+1. Push your code to GitHub (without the models/ and lfw/ directories)
 2. Create an account on [Streamlit Cloud](https://streamlit.io/cloud)
 3. Connect your GitHub repository
 4. Set the main file path to `app.py`
-5. Deploy!
+5. When the app starts for the first time, it will:
+   - Inform users that detection works initially (using Haar Cascade)
+   - Provide instructions for downloading the DNN models for better detection
+   - Guide users to train a model for recognition functionality
 
 ### Render Deployment
 
@@ -220,7 +222,6 @@ This increases the effective training dataset size and improves model robustness
 5. Use the following settings:
    - Build Command: `pip install -r requirements.txt`
    - Start Command: `streamlit run app.py`
-6. Deploy!
 
 For detailed deployment instructions, run:
 ```bash
@@ -251,6 +252,8 @@ python deploy.py
    - Verify Python version (3.7+): `python --version`
    - Check port availability (8501 is default for Streamlit)
 
+## Screenshots
+
 Here are some screenshots showing the application in action:
 
 ![Face Recognition Interface](/result_screenshots/screenshot1.png)
@@ -264,22 +267,6 @@ Here are some screenshots showing the application in action:
 ![Multiple Face Detection](/result_screenshots/screenshot3.png)
 
 *Detection of faces by uploading take photo using web camera*
-
-## Large Files Download
-
-Some files are too large to be included in the GitHub repository. You can download these files from my Google Drive:
-
-### Required Files
-- **Pre-trained Models**: [Download models folder](https://drive.google.com/drive/folders/your-models-folder-link)
-  - Contains face_classifier.pkl and DNN models
-  - Extract to the project root to create the `models/` directory
-
-### Optional Files
-- **LFW Dataset**: [Download LFW dataset](https://drive.google.com/drive/folders/your-lfw-folder-link)
-  - Required only if you want to train your own model
-  - Extract to the project root to create the `lfw/` directory
-
-After downloading, place these folders in the root directory of the project to match the structure shown above.
 
 ## Author
 
