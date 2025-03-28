@@ -256,13 +256,13 @@ python deploy.py
 Here are some screenshots showing the application in action:
 
 ![Face Recognition Interface](/result_screenshots/screenshot1.png)
-*Main application interface with uploaded image and recognition results*
+*\nMain application interface with uploaded image and recognition results*
 
 ![Multiple Face Detection](/result_screenshots/screenshot2.png)
-*Detection of faces by uploading the photo*
+*\nDetection of faces by uploading the photo*
 
 ![Multiple Face Detection](/result_screenshots/screenshot3.png)
-*Detection of faces by uploading take photo using web camera*
+*\nDetection of faces by uploading take photo using web camera*
 
 ## Large Files Download
 
