@@ -251,18 +251,19 @@ python deploy.py
    - Verify Python version (3.7+): `python --version`
    - Check port availability (8501 is default for Streamlit)
 
-## Screenshots
-
 Here are some screenshots showing the application in action:
 
 ![Face Recognition Interface](/result_screenshots/screenshot1.png)
-*\nMain application interface with uploaded image and recognition results*
+
+*Main application interface with uploaded image and recognition results*
 
 ![Multiple Face Detection](/result_screenshots/screenshot2.png)
-*\nDetection of faces by uploading the photo*
+
+*Detection of faces by uploading the photo*
 
 ![Multiple Face Detection](/result_screenshots/screenshot3.png)
-*\nDetection of faces by uploading take photo using web camera*
+
+*Detection of faces by uploading take photo using web camera*
 
 ## Large Files Download
 
